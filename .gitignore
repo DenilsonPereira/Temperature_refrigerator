@@ -1,0 +1,46 @@
+#############################
+# Node.js
+#############################
+node_modules/
+npm-debug.log
+yarn-debug.log
+yarn-error.log
+package-lock.json
+pnpm-lock.yaml
+
+#############################
+# Builds e distribuições
+#############################
+dist/
+build/
+*.map
+
+#############################
+# ESP-IDF
+#############################
+# Pasta de build gerada pelo ESP-IDF
+build/
+# Configuração antiga
+sdkconfig.old
+# Configuração local (se não quiser versionar)
+sdkconfig
+# Configuração padrão para compartilhar
+# sdkconfig.defaults
+
+# Binários e arquivos gerados
+*.bin
+*.elf
+*.map
+*.log
+
+#############################
+# IDEs e editores
+#############################
+.vscode/
+.idea/
+
+#############################
+# Arquivos temporários e de SO
+#############################
+.DS_Store
+Thumbs.db

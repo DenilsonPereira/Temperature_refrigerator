@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Monitor de Temperatura</title>
+        <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+        <script
+            src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
+        <script
+            src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation@3.0.1/dist/chartjs-plugin-annotation.min.js"></script>
+        <link rel="stylesheet" href="style.css">
+    </head>
+
+    <body>
+        <h1>Temperatura - Geladeira de Culturas</h1>
+
+        <div class="dashboard">
+            <div class="card">
+                <h2>Temperatura Atual</h2>
+                <p class="value" style="color: #1d8a23;"><span id="current-temp">--.--</span> °C</p>
+                <p id="last-update" class="last-update">Última atualização: --</p>
+            </div>
+            <div class="card">
+                <h2>Mínima (24h)</h2>
+                <p class="value" style="color: #17a2b8;"><span id="min-temp">--.--</span> °C</p>
+            </div>
+            <div class="card">
+                <h2>Máxima (24h)</h2>
+                <p class="value" style="color: #dc3545;"><span id="max-temp">--.--</span> °C</p>
+            </div>
+
+            <div class="chart-container">
+
+                <h2>Extremos Registrados</h2>
+
+                <canvas id="minMaxChart"></canvas>
+
+            </div>
+
+            <div class="bottom-row">
+                <div class="chart-container">
+                    <h2>Variação nas Últimas 24 Horas</h2>
+                    <canvas id="tempHistoryChart"></canvas>
+                </div>
+                <div class="card">
+                    <h2>Relatório Diário</h2>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Horário</th>
+                                <th>Temperatura</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>08:00</td>
+                                <td id="temp-8am">--.-- °C</td>
+                            </tr>
+                            <tr>
+                                <td>12:00</td>
+                                <td id="temp-12pm">--.-- °C</td>
+                            </tr>
+                            <tr>
+                                <td>18:00</td>
+                                <td id="temp-6pm">--.-- °C</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <script>
+            const currentTempEl = document.getElementById('current-temp');
+            const lastUpdateEl = document.getElementById('last-update');
+            const minTempEl = document.getElementById('min-temp');
+            const maxTempEl = document.getElementById('max-temp');
+            const temp8amEl = document.getElementById('temp-8am');
+            const temp12pmEl = document.getElementById('temp-12pm');
+            const temp6pmEl = document.getElementById('temp-6pm');
+
+            let latestTemperature = null;
+
+            //Gráfico de Barras
+            const minMaxCtx = document.getElementById('minMaxChart').getContext('2d');
+            const minMaxChart = new Chart(minMaxCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['Mínima', 'Máxima'],
+                    datasets: [{ label: 'Temperatura (°C)', data: [null, null], backgroundColor: ['#17a2b8', '#dc3545'] }]
+                },
+                options: { indexAxis: 'y', responsive: true, plugins: { legend: { display: false } } }
+            });
+
+            // Gráfico de Linha
+            const historyCtx = document.getElementById('tempHistoryChart').getContext('2d');
+            const tempHistoryChart = new Chart(historyCtx, {
+                type: 'line', data: { datasets: [{ label: 'Temperatura (°C)', borderColor: 'rgb(75, 192, 192)', backgroundColor: 'rgba(75, 192, 192, 0.1)', fill: true, tension: 0.2, data: [] }] },
+                options: { scales: { x: { type: 'time', time: { unit: 'hour' } }, y: { beginAtZero: false } }, plugins: { annotation: { annotations: { safeZone: { type: 'box', yMin: -6.0, yMax: 5.0, backgroundColor: 'rgba(40, 167, 69, 0.1)', borderColor: 'rgba(40, 167, 69, 0.1)' }, lineMax: { type: 'line', yMin: 5.0, yMax: 5.0, borderColor: '#dc3545', borderWidth: 2, borderDash: [5, 5], label: { content: 'Máxima Ideal', position: 'start', display: true, color: '#dc3545', font: { weight: 'bold' } } }, lineMin: { type: 'line', yMin: -6.0, yMax: -6.0, borderColor: '#17a2b8', borderWidth: 2, borderDash: [5, 5], label: { content: 'Mínima Ideal', position: 'start', display: true, color: '#17a2b8', font: { weight: 'bold' } } } } } } }
+            });
+
+
+            async function loadInitialData() {
+                const statsResponse = await fetch('/api/stats');
+                const stats = await statsResponse.json();
+                updateStats(stats.minTemp, stats.maxTemp); 
+
+                const historyResponse = await fetch('/api/history/day');
+                const history = await historyResponse.json();
+                tempHistoryChart.data.datasets[0].data = history.map(d => ({ x: d.timestamp, y: d.temperatura }));
+                tempHistoryChart.update();
+
+                loadReportData();
+            }
+
+            function updateStats(min, max) {
+                if (min !== null) {
+                    minTempEl.textContent = min.toFixed(2);
+                    minMaxChart.data.datasets[0].data[0] = min;
+                }
+                if (max !== null) {
+                    maxTempEl.textContent = max.toFixed(2);
+                    minMaxChart.data.datasets[0].data[1] = max;
+                }
+                minMaxChart.update();
+            }
+
+            async function loadReportData() {
+                try {
+                    const response = await fetch('/api/report');
+                    const data = await response.json();
+                    temp8amEl.textContent = data.t8am !== null ? `${data.t8am.toFixed(2)} °C` : 'Aguardando...';
+                    temp12pmEl.textContent = data.t12pm !== null ? `${data.t12pm.toFixed(2)} °C` : 'Aguardando...';
+                    temp6pmEl.textContent = data.t6pm !== null ? `${data.t6pm.toFixed(2)} °C` : 'Aguardando...';
+                } catch (e) { console.error("Erro ao carregar relatório:", e); }
+            }
+
+            const socket = new WebSocket(`ws://${window.location.host}`);
+            socket.onmessage = function (event) {
+                const temp = parseFloat(event.data);
+                latestTemperature = temp;
+                currentTempEl.textContent = temp.toFixed(2);
+                lastUpdateEl.textContent = `Última atualização: ${new Date().toLocaleTimeString()}`;
+
+                const currentMin = parseFloat(minTempEl.textContent) || temp;
+                const currentMax = parseFloat(maxTempEl.textContent) || temp;
+                if (temp < currentMin || temp > currentMax) {
+                    updateStats(Math.min(currentMin, temp), Math.max(currentMax, temp));
+                }
+            };
+
+            setInterval(() => {
+                if (latestTemperature !== null) {
+                    tempHistoryChart.data.datasets[0].data.push({ x: Date.now(), y: latestTemperature });
+                    if (tempHistoryChart.data.datasets[0].data.length > 2000) {
+                        tempHistoryChart.data.datasets[0].data.shift();
+                    }
+                    tempHistoryChart.update();
+                }
+            }, 60000);
+
+            setInterval(loadReportData, 5 * 60 * 1000);
+
+            document.addEventListener('DOMContentLoaded', loadInitialData);
+        </script>
+    </body>
+
+</html>
