@@ -21,11 +21,11 @@
 #define TEMP_OFFSET -5.70f
 
 // Configurações de Wi-Fi
-#define WIFI_SSID      "Teste"
-#define WIFI_PASSWORD  "12345678"
+#define WIFI_SSID      "Nome de sua rede wifi"
+#define WIFI_PASSWORD  "Sua senha"
 
 // Configurações do Broker MQTT
-#define MQTT_BROKER_URL "mqtt://192.168.95.203"
+#define MQTT_BROKER_URL "url do seu broker / ip"
 #define MQTT_TOPIC      "sensor/pt100/temperatura"
 #define MQTT_TOPIC_STATUS "sensor/pt100/status"
 
