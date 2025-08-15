@@ -36,7 +36,7 @@
 #define PIN_NUM_CLK  18
 #define PIN_NUM_CS   5
 #define LED_ALERTA   GPIO_NUM_2
-#define BOTAO_MODO   GPIO_NUM_32
+#define BOTAO_MODO   GPIO_NUM_15
 
 static const char *TAG = "PT100_MONITOR";
 

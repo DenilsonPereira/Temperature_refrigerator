@@ -1,4 +1,4 @@
-idf_component_register(SRCS "ssd1306.c" "main.c"
+idf_component_register(SRCS "main.c" "ssd1306.c"
                        INCLUDE_DIRS "."
                        PRIV_REQUIRES driver max31865 esp_wifi
                                     esp_event     # <--- ADICIONADO
