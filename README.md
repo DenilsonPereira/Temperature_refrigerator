@@ -80,6 +80,8 @@ Conecte todos os componentes ao ESP32 conforme as tabelas abaixo.
 
 Atenção: É altamente recomendado alimentar o ESP32 com uma fonte externa estável de 5V e 2A (como um carregador de celular) para evitar falhas de leitura do sensor quando o Wi-Fi estiver ativo.
 
+![Mapa_Pinout](img/MAPA_PINOUT.svg)
+
 | Periférico | Fiação | 
 | -------- | ----- |
 | Display OLED (I2C)| GND -> GND, VCC -> 3V3, SCK -> GPIO22, SDA -> GPIO21 |
