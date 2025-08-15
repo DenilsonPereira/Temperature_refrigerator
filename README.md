@@ -7,7 +7,17 @@ Paralelamente, o ESP32 se conecta a uma rede Wi-Fi e publica os dados de tempera
 
 A dashboard web exibe os dados em tempo real, temperatura mínima e máxima registrada nas últimas 24 horas, gráficos da variação de temperatura minuto a minuto das últimas 24 horas e uma tabela com o registro definido em três horários do dia.
 
+## Hardware utilizado:
+- ESP32
+- Sensor PT100
+- Módulo MAX31865
+- Display OLED 128x64 0.96" I2C 
+- Módulo Interruptor Botão 12x12
+- Protoboard
+- Jumpers
+
 ### Funcionalidades Principais
+<hr>
 - Medição Precisa: Leitura de temperatura com sensor PT100 e calibração por software (importante que seja feita a calibração do seu sensor).
 - Display Local: Tela OLED que exibe a temperatura Atual, Mínima e Máxima, controlada por um botão.
 - Alerta Visual: Um LED acende imediatamente se a temperatura estiver fora da faixa ideal de -6°C a 5°C ou em caso de falha no sensor.
@@ -17,13 +27,14 @@ A dashboard web exibe os dados em tempo real, temperatura mínima e máxima regi
 - Dashboard Web em Tempo Real: Uma página web exibe a temperatura atual (atualizada via WebSockets), estatísticas e gráficos da variação de temperatura ao longo do tempo.
 
 ### Componentes do Sistema
+<hr>
 O projeto é dividido em três partes principais:
 1. Hardware Embarcado (ESP32): O dispositivo físico que realiza a medição e a publicação dos dados.
 2. Serviços de Backend (PC Local): O broker MQTT, o banco de dados MongoDB e o servidor Node.js que atua como ponte.
 3. Frontend (Navegador Web): A dashboard visual para monitoramento.
 
 ### Como Executar o Projeto
-
+<hr>
 Siga os passos abaixo para configurar e executar o sistema completo.
 
 1. Pré-requisitos de Software
@@ -67,9 +78,12 @@ Após instalado vá no menu lateral na opção extensões e procure por ESP-IDF 
 Após isso configure a extensão ESP-IDF para versão 5.4.1 seguindo o tutorial do link: `https://github.com/espressif/vscode-esp-idf-extension`
 
 2. Montagem do Hardware
+
 Conecte todos os componentes ao ESP32 conforme as tabelas abaixo.
 
 Atenção: É altamente recomendado alimentar o ESP32 com uma fonte externa estável de 5V e 2A (como um carregador de celular) para evitar falhas de leitura do sensor quando o Wi-Fi estiver ativo.
+
+![Mapa_Pinout](img/MAPA_PINOUT.svg)
 
 | Periférico | Fiação | 
 | -------- | ----- |
@@ -79,7 +93,7 @@ Atenção: É altamente recomendado alimentar o ESP32 com uma fonte externa est�
 | Botão (Módulo 3 pinos)| GND -> GND, VCC -> 3V3, OUT -> GPIO32|
 
 3. Configuração e Execução do Firmware (ESP32)
-   
+  
     1.	Clone ou baixe este repositório.
     2.	Abra o projeto na sua IDE (ex: VS Code).
     3.	Edite o arquivo main/main.c e configure os seguintes parâmetros:
@@ -128,3 +142,10 @@ Você deverá ver mensagens confirmando a conexão com o MongoDB e o broker MQTT
     1.	Com o ESP32 e o server.js rodando, abra seu navegador de internet.
     2.	Acesse o endereço: `http://localhost:3000`
     3.	O dashboard deve carregar, exibir os dados históricos e começar a receber as atualizações de temperatura em tempo real.
+
+## Imagens do projeto rodando
+<hr>
+
+![ESP_FUNCIONANDO](img/ESP-FUNCIONANDO.jpg)
+![TELA_DASHBOARD](img/dashboard_temperatura.jpg)
+![GRÁFICO_DASHBOARD](img/dashboard_grafico.jpg)
