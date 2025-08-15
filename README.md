@@ -7,6 +7,15 @@ Paralelamente, o ESP32 se conecta a uma rede Wi-Fi e publica os dados de tempera
 
 A dashboard web exibe os dados em tempo real, temperatura mínima e máxima registrada nas últimas 24 horas, gráficos da variação de temperatura minuto a minuto das últimas 24 horas e uma tabela com o registro definido em três horários do dia.
 
+## Hardware utilizado:
+- ESP32
+- Sensor PT100
+- Módulo MAX31865
+- Display OLED 128x64 0.96" I2C 
+- Módulo Interruptor Botão 12x12
+- Protoboard
+- Jumpers
+
 ### Funcionalidades Principais
 - Medição Precisa: Leitura de temperatura com sensor PT100 e calibração por software (importante que seja feita a calibração do seu sensor).
 - Display Local: Tela OLED que exibe a temperatura Atual, Mínima e Máxima, controlada por um botão.
