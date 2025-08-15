@@ -139,3 +139,9 @@ Você deverá ver mensagens confirmando a conexão com o MongoDB e o broker MQTT
     1.	Com o ESP32 e o server.js rodando, abra seu navegador de internet.
     2.	Acesse o endereço: `http://localhost:3000`
     3.	O dashboard deve carregar, exibir os dados históricos e começar a receber as atualizações de temperatura em tempo real.
+
+## Imagens do projeto rodando
+
+![ESP_FUNCIONANDO](img/ESP-FUNCIONANDO.jpg)
+![TELA_DASHBOARD](img/dashboard_temperatura.jpg)
+![GRÁFICO_DASHBOARD](img/dashboard_grafico.jpg)
