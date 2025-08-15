@@ -17,7 +17,7 @@ A dashboard web exibe os dados em tempo real, temperatura mínima e máxima regi
 - Jumpers
 
 ### Funcionalidades Principais
-<hr>
+
 - Medição Precisa: Leitura de temperatura com sensor PT100 e calibração por software (importante que seja feita a calibração do seu sensor).
 - Display Local: Tela OLED que exibe a temperatura Atual, Mínima e Máxima, controlada por um botão.
 - Alerta Visual: Um LED acende imediatamente se a temperatura estiver fora da faixa ideal de -6°C a 5°C ou em caso de falha no sensor.
@@ -27,45 +27,46 @@ A dashboard web exibe os dados em tempo real, temperatura mínima e máxima regi
 - Dashboard Web em Tempo Real: Uma página web exibe a temperatura atual (atualizada via WebSockets), estatísticas e gráficos da variação de temperatura ao longo do tempo.
 
 ### Componentes do Sistema
-<hr>
+
 O projeto é dividido em três partes principais:
 1. Hardware Embarcado (ESP32): O dispositivo físico que realiza a medição e a publicação dos dados.
 2. Serviços de Backend (PC Local): O broker MQTT, o banco de dados MongoDB e o servidor Node.js que atua como ponte.
 3. Frontend (Navegador Web): A dashboard visual para monitoramento.
 
 ### Como Executar o Projeto
-<hr>
+
 Siga os passos abaixo para configurar e executar o sistema completo.
 
 1. Pré-requisitos de Software
 Garanta que você tem os seguintes softwares instalados na sua máquina de desenvolvimento:
 - Node.js: Para executar o servidor de backend.
   
-Faça o download conforme seu sistema operacional, no site: `https://www.nodejs.tech/pt-br/download`
+Faça o download conforme seu sistema operacional, no site: [Download Node.js](https://www.nodejs.tech/pt-br/download)
 
 Siga os passos de instalação do instalador.
 
 - MongoDB Community Server: O banco de dados para armazenar os dados. (Recomenda-se instalar também o MongoDB Compass para visualização).
 
-Faça o download do MongoDB no site: `https://www.mongodb.com/try/download/community`
+Faça o download do MongoDB no site: [Download MongoDB](https://www.mongodb.com/try/download/community)
 
 Siga os passos de instalação do instalador.
 
 - Mosquitto MQTT Broker: O intermediário para as mensagens MQTT.
 
-Faça o download do mosquito, no site: `https://mosquitto.org/download/`
+Faça o download do mosquito, no site: [Download Mosquitto](https://mosquitto.org/download/)
 
 Siga os passos de instalação do instalador.
 
 > Observação: No Windows pode ocorrer problema com o firewall relacionado a porta que o Broker irá utilizar, para habilitar essa permissão faça uma regra de firewall como a descrita abaixo.
-
-Aperte os botões `Windows + R` simultaneamente e digite wf.msc;\
-Clique em Regras de Entrada, ao lado clique em Nova Regra;\
-Selecione a opção Porta e avançar;\
-Na próxima tela deixe a opção TCP marcada, e na parte `Portas locais específicas`, digite a porta do Broker por padrão é `1883` e clique em avançar;\
-Agora deixe na opção `Permitir a conexão` e avançar;\
-Nessa nova etapa pode deixar as duas primeiras opções marcadas e avançar;\
-Para finalizar dê um nome para a regra (Ex: Mosquitto 1883) e aperte em concluir.\
+```
+1. Aperte os botões `Windows + R` simultaneamente e digite wf.msc;
+2. Clique em Regras de Entrada, ao lado clique em Nova Regra;
+3. Selecione a opção Porta e avançar;
+4. Na próxima tela deixe a opção TCP marcada, e na parte `Portas locais específicas`, digite a porta do Broker por padrão é `1883` e clique em avançar;
+5. Agora deixe na opção `Permitir a conexão` e avançar;
+6. Nessa nova etapa pode deixar as duas primeiras opções marcadas e avançar;
+4. Para finalizar dê um nome para a regra (Ex: Mosquitto 1883) e aperte em concluir.
+```
 
 - Editor de Código: VS Code com a extensão oficial do ESP-IDF na versão v5.4.1.
 
@@ -114,7 +115,18 @@ idf.py flash monitor
     ```
     npm install express mongodb mqtt ws
     ```
-    3.	Garanta que os serviços do MongoDB estejam rodando. 
+    3.	Garanta que os serviços do MongoDB estejam rodando.
+   
+        Aperte `Windows + R`
+
+        Digite `services.msc` e dê Enter.
+        
+        Procure por MongoDB na lista.
+        
+        Se o Status estiver como Em execução (Running), significa que o MongoDB está ativo.
+        
+        Caso não esteja, clique com o botão direito e escolha Iniciar.
+      	
     4.	Inicie o Mosquitto seguindo os passos:
    
         -	Navegue até o diretório de instalação do Mosquitto e edite o arquivo de configuração mosquitto.conf com um editor de texto.
@@ -129,7 +141,7 @@ idf.py flash monitor
             mosquitto -c mosquitto.conf -v
             ```
 
-    6.	Inicie o servidor de backend:
+    5.	Inicie o servidor de backend:
 
         ```
       	node server.js
